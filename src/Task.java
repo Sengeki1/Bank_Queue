@@ -13,9 +13,9 @@ public class Task extends TimerTask {
     public void run() {
         if (this.alunosAtendidos.size() < 10) {
             fila = this.aluno - this.alunosAtendidos.size();
-            System.out.println("Existem " + fila + " estudantes na fila");
+            System.out.println("Existem " + fila + " clientes na fila");
         } else {
-            System.out.println("Todos os estudantes foram atendidos");
+            System.out.println("Todos os clientes foram atendidos");
             this.cancel();
         }
     }

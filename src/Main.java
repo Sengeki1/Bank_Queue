@@ -3,7 +3,7 @@ import java.util.concurrent.Semaphore;
 
 public class Main {
     public static void main(String[] args) {
-        int alunos = 10;
+        int clientes = 10;
         Random rand = new Random();
         Timer timer = new Timer();
 
@@ -12,14 +12,14 @@ public class Main {
         Semaphore atendente3 = new Semaphore(1);
         ThreadLocal<Integer> tempo = new ThreadLocal<>();
 
-        List<Integer> alunosAtendidos = new ArrayList<>();
+        List<Integer> clientesAtendidos = new ArrayList<>();
 
         System.out.println("Atendimento Aberto");
-        for (int i = 0; i < alunos; i++) {
-            Thread aluno = new Thread(new Estudante(atendente1, atendente2, atendente3, tempo, i, rand, alunosAtendidos));
-            aluno.start();
+        for (int i = 0; i < clientes; i++) {
+            Thread cliente = new Thread(new Cliente(atendente1, atendente2, atendente3, tempo, i, rand, clientesAtendidos));
+            cliente.start();
         }
 
-        timer.schedule(new Task(alunosAtendidos, alunos), 10000, 10000);
+        timer.schedule(new Task(clientesAtendidos, clientes), 10000, 10000);
     }
 }
