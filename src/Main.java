@@ -16,12 +16,14 @@ public class Main {
 
         System.out.println("Atendimento Aberto");
         for (int i = 0; i < clientes; i++) {
-            if (i == 2 || i == 3) {
-                Thread prioridade = new Thread(new Prioridade(atendente1, atendente2, atendente3, tempo, i, rand, clientesAtendidos));
-                prioridade.start();
-            } else {
+            if (i != 2 && i != 3) {
                 Thread cliente = new Thread(new Cliente(atendente1, atendente2, atendente3, tempo, i, rand, clientesAtendidos));
+                cliente.setPriority(1);
                 cliente.start();
+            } else {
+                Thread prioridade = new Thread(new Prioridade(atendente1, atendente2, tempo, i, rand));
+                prioridade.setPriority(10);
+                prioridade.start();
             }
         }
 

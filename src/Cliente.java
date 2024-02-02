@@ -89,4 +89,11 @@ public class Cliente implements Runnable{
             throw new RuntimeException(e);
         }
     }
+    public int getClientesAtendidos() {
+        return this.clientesAtendidos.size();
+    }
+
+    public void setClientesAtendidos(int value) {
+        this.clientesAtendidos.add(value);
+    }
 }
