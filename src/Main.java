@@ -16,8 +16,13 @@ public class Main {
 
         System.out.println("Atendimento Aberto");
         for (int i = 0; i < clientes; i++) {
-            Thread cliente = new Thread(new Cliente(atendente1, atendente2, atendente3, tempo, i, rand, clientesAtendidos));
-            cliente.start();
+            if (i == 2) {
+                Thread prioridade = new Thread(new Prioridade(atendente1, atendente2, atendente3, tempo, i, rand, clientesAtendidos));
+                prioridade.start();
+            } else {
+                Thread cliente = new Thread(new Cliente(atendente1, atendente2, atendente3, tempo, i, rand, clientesAtendidos));
+                cliente.start();
+            }
         }
 
         timer.schedule(new Task(clientesAtendidos, clientes), 10000, 10000);
