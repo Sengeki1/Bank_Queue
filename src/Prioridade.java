@@ -31,25 +31,50 @@ public class Prioridade implements Runnable{
     public void run() {
         while (true) {
             try {
-                if (id_cliente == 2 && this.clientesAtendidos.size() > 2) {
-                    atendente1 = this.Adalgiza.tryAcquire();
-                }
-                if (atendente1) {
-                    System.out.println("Gravida " + (this.id_cliente + 1) + " esta sendo atendido pelo atendente " + "Adalgiza");
+                if (this.id_cliente == 2) {
+                    sleep(2000);
+                    this.atendente1 = this.Adalgiza.tryAcquire();
 
-                    temporizador = rand.nextInt(2000, 5000);
-                    tempo.set(temporizador);
-                    sleep(temporizador);
+                    if (this.atendente1) {
+                        System.out.println("Gravida " + (this.id_cliente + 1) + " esta sendo atendido pelo atendente " + "Adalgiza");
 
-                    System.out.println("Gravida " + (this.id_cliente + 1) + " terminou o atendimento. Tempo de atendimento: " + tempo.get() + " millisegundos");
-                    synchronized (this.clientesAtendidos) {
-                        this.clientesAtendidos.add(1);
+                        this.temporizador = rand.nextInt(4000, 7000);
+                        this.tempo.set(temporizador);
+                        sleep(temporizador);
+
+                        System.out.println("Gravida " + (this.id_cliente + 1) + " terminou o atendimento. Tempo de atendimento: " + tempo.get() + " millisegundos");
+                        synchronized (this.clientesAtendidos) {
+                            this.clientesAtendidos.add(1);
+                        }
+
+                        this.Adalgiza.release();
+                        break;
+                    } else {
+                        sleep(rand.nextInt(100));
                     }
+                }
 
-                    Adalgiza.release();
-                    break;
-                } else {
-                    sleep(rand.nextInt(500));
+                if (id_cliente == 3) {
+                    sleep(2000);
+                    this.atendente2 = this.Dora.tryAcquire();
+
+                    if (this.atendente2) {
+                        System.out.println("Idoso " + (this.id_cliente + 1) + " esta sendo atendido pelo atendente " + "Dora");
+
+                        this.temporizador = rand.nextInt(5000, 8000);
+                        this.tempo.set(temporizador);
+                        sleep(temporizador);
+
+                        System.out.println("Idoso " + (this.id_cliente + 1) + " terminou o atendimento. Tempo de atendimento: " + tempo.get() + " millisegundos");
+                        synchronized (this.clientesAtendidos) {
+                            this.clientesAtendidos.add(1);
+                        }
+
+                        this.Dora.release();
+                        break;
+                    } else {
+                        sleep(rand.nextInt(500));
+                    }
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);

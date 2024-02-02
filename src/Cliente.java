@@ -18,7 +18,7 @@ public class Cliente implements Runnable{
     private boolean atendente3;
 
 
-    public Cliente(Semaphore atendente1, Semaphore atendente2, Semaphore atendente3, ThreadLocal<Integer> tempo, int index, Random rand, List<Integer> alunosAtendidos) {
+    public Cliente(Semaphore atendente1, Semaphore atendente2, Semaphore atendente3, ThreadLocal<Integer> tempo, int index, Random rand, List<Integer> clientesAtendidos) {
         this.Adalgiza = atendente1;
         this.Dora = atendente2;
         this.Juliana = atendente3;
@@ -26,19 +26,19 @@ public class Cliente implements Runnable{
         this.tempo = tempo;
         this.id_cliente = index;
         this.rand = rand;
-        this.clientesAtendidos = alunosAtendidos;
+        this.clientesAtendidos = clientesAtendidos;
     }
 
     @Override
     public void run() {
         try {
             while (this.clientesAtendidos.size() < 10) {
-                sleep(rand.nextInt(2000, 5000));
+                sleep(rand.nextInt(1000, 5000));
                 atendente1 = Adalgiza.tryAcquire();
                 if (atendente1 && !atendente2 && !atendente3) {
                     System.out.println("Cliente " + (this.id_cliente + 1) + " esta sendo atendido pelo atendente " + "Adalgiza");
 
-                    temporizador = rand.nextInt(1000, 5000);
+                    temporizador = rand.nextInt(4000, 6000);
                     tempo.set(temporizador);
                     sleep(temporizador);
 
@@ -54,7 +54,7 @@ public class Cliente implements Runnable{
                     if (atendente2 && !atendente1 && !atendente3) {
                         System.out.println("Cliente " + (this.id_cliente + 1) + " esta sendo atendido pelo atendente " + "Dora");
 
-                        temporizador = rand.nextInt(1000, 5000);
+                        temporizador = rand.nextInt(4000, 6000);
                         tempo.set(temporizador);
                         sleep(temporizador);
 
@@ -70,7 +70,7 @@ public class Cliente implements Runnable{
                         if (atendente3 && !atendente1 && !atendente2) {
                             System.out.println("Cliente " + (this.id_cliente + 1) + " esta sendo atendido pelo atendente " + "Juliana");
 
-                            temporizador = rand.nextInt(1000, 5000);
+                            temporizador = rand.nextInt(4000, 6000);
                             tempo.set(temporizador);
                             sleep(temporizador);
 

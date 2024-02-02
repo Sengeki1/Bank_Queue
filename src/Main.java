@@ -16,7 +16,7 @@ public class Main {
 
         System.out.println("Atendimento Aberto");
         for (int i = 0; i < clientes; i++) {
-            if (i == 2) {
+            if (i == 2 || i == 3) {
                 Thread prioridade = new Thread(new Prioridade(atendente1, atendente2, atendente3, tempo, i, rand, clientesAtendidos));
                 prioridade.start();
             } else {
