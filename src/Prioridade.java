@@ -14,21 +14,23 @@ public class Prioridade implements Runnable{
     private boolean atendente1;
     private boolean atendente2;
     private Cliente cliente;
-    public Prioridade(Semaphore atendente1, Semaphore atendente2, ThreadLocal<Integer> tempo, int index, Random rand) {
+
+    public Prioridade(Semaphore atendente1, Semaphore atendente2, ThreadLocal<Integer> tempo, int index, Random rand, Cliente cliente) {
         this.Adalgiza = atendente1;
         this.Dora = atendente2;
 
         this.tempo = tempo;
         this.id_cliente = index;
         this.rand = rand;
+        this.cliente = cliente;
     }
 
     @Override
     public void run() {
-        while (cliente.getClientesAtendidos() < 10) {
-            try {
-                if (cliente.getClientesAtendidos() > 2) {
-                    if (this.id_cliente == 2) {
+        while (true) {
+            if (this.cliente.clientesAtendidos.size() > 3) {
+                try {
+                    if (this.id_cliente == 0) {
                         this.atendente1 = this.Adalgiza.tryAcquire();
 
                         if (this.atendente1) {
@@ -39,14 +41,16 @@ public class Prioridade implements Runnable{
                             sleep(temporizador);
 
                             System.out.println("Gravida " + (this.id_cliente + 1) + " terminou o atendimento. Tempo de atendimento: " + tempo.get() + " millisegundos");
-                            cliente.setClientesAtendidos(1);
+                            synchronized (cliente.clientesAtendidos) {
+                                cliente.clientesAtendidos.add(1);
+                            }
 
                             this.Adalgiza.release();
                             break;
                         }
                     }
 
-                    if (this.id_cliente == 3) {
+                    if (this.id_cliente == 1) {
                         this.atendente2 = this.Dora.tryAcquire();
 
                         if (this.atendente2) {
@@ -57,15 +61,17 @@ public class Prioridade implements Runnable{
                             sleep(temporizador);
 
                             System.out.println("Idoso " + (this.id_cliente + 1) + " terminou o atendimento. Tempo de atendimento: " + tempo.get() + " millisegundos");
-                            cliente.setClientesAtendidos(1);
+                            synchronized (cliente.clientesAtendidos) {
+                                cliente.clientesAtendidos.add(1);
+                            }
 
                             this.Dora.release();
                             break;
                         }
                     }
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
-            } catch (Exception e) {
-                throw new RuntimeException(e);
             }
         }
     }

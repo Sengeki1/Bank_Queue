@@ -7,24 +7,21 @@ import static java.lang.Thread.sleep;
 public class Cliente implements Runnable{
     private ThreadLocal<Integer> tempo;
     private Random rand;
-    private int id_cliente;
     private Integer temporizador;
-    private List<Integer> clientesAtendidos;
+    public List<Integer> clientesAtendidos;
     private Semaphore Adalgiza;
     private Semaphore Dora;
     private Semaphore Juliana;
     private boolean atendente1;
     private boolean atendente2;
     private boolean atendente3;
-
-
-    public Cliente(Semaphore atendente1, Semaphore atendente2, Semaphore atendente3, ThreadLocal<Integer> tempo, int index, Random rand, List<Integer> clientesAtendidos) {
+    
+    public Cliente(Semaphore atendente1, Semaphore atendente2, Semaphore atendente3, ThreadLocal<Integer> tempo, Random rand, List<Integer> clientesAtendidos) {
         this.Adalgiza = atendente1;
         this.Dora = atendente2;
         this.Juliana = atendente3;
 
         this.tempo = tempo;
-        this.id_cliente = index;
         this.rand = rand;
         this.clientesAtendidos = clientesAtendidos;
     }
@@ -36,13 +33,13 @@ public class Cliente implements Runnable{
                 sleep(rand.nextInt(1000, 5000));
                 atendente1 = Adalgiza.tryAcquire();
                 if (atendente1 && !atendente2 && !atendente3) {
-                    System.out.println("Cliente " + (this.id_cliente + 1) + " esta sendo atendido pelo atendente " + "Adalgiza");
+                    System.out.println("Cliente " + (Thread.currentThread().getName()) + " esta sendo atendido pelo atendente " + "Adalgiza");
 
-                    temporizador = rand.nextInt(4000, 6000);
+                    temporizador = rand.nextInt(4000, 8000);
                     tempo.set(temporizador);
                     sleep(temporizador);
 
-                    System.out.println("Cliente " + (this.id_cliente + 1) + " terminou o atendimento. Tempo de atendimento: " + tempo.get() + " millisegundos");
+                    System.out.println("Cliente " + (Thread.currentThread().getName()) + " terminou o atendimento. Tempo de atendimento: " + tempo.get() + " millisegundos");
                     synchronized (this.clientesAtendidos) {
                         this.clientesAtendidos.add(1);
                     }
@@ -52,13 +49,13 @@ public class Cliente implements Runnable{
                 } else {
                     atendente2 = Dora.tryAcquire();
                     if (atendente2 && !atendente1 && !atendente3) {
-                        System.out.println("Cliente " + (this.id_cliente + 1) + " esta sendo atendido pelo atendente " + "Dora");
+                        System.out.println("Cliente " + (Thread.currentThread().getName()) + " esta sendo atendido pelo atendente " + "Dora");
 
-                        temporizador = rand.nextInt(4000, 6000);
+                        temporizador = rand.nextInt(4000, 10000);
                         tempo.set(temporizador);
                         sleep(temporizador);
 
-                        System.out.println("Cliente " + (this.id_cliente + 1) + " terminou o atendimento. Tempo de atendimento: " + tempo.get() + " millisegundos");
+                        System.out.println("Cliente " + (Thread.currentThread().getName()) + " terminou o atendimento. Tempo de atendimento: " + tempo.get() + " millisegundos");
                         synchronized (this.clientesAtendidos) {
                             this.clientesAtendidos.add(1);
                         }
@@ -68,13 +65,13 @@ public class Cliente implements Runnable{
                     } else {
                         atendente3 = Juliana.tryAcquire();
                         if (atendente3 && !atendente1 && !atendente2) {
-                            System.out.println("Cliente " + (this.id_cliente + 1) + " esta sendo atendido pelo atendente " + "Juliana");
+                            System.out.println("Cliente " + (Thread.currentThread().getName()) + " esta sendo atendido pelo atendente " + "Juliana");
 
-                            temporizador = rand.nextInt(4000, 6000);
+                            temporizador = rand.nextInt(6000, 9000);
                             tempo.set(temporizador);
                             sleep(temporizador);
 
-                            System.out.println("Cliente " + (this.id_cliente + 1) + " terminou o atendimento. Tempo de atendimento: " + tempo.get() + " millisegundos");
+                            System.out.println("Cliente " + (Thread.currentThread().getName()) + " terminou o atendimento. Tempo de atendimento: " + tempo.get() + " millisegundos");
                             synchronized (this.clientesAtendidos) {
                                 this.clientesAtendidos.add(1);
                             }
@@ -88,12 +85,5 @@ public class Cliente implements Runnable{
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-    }
-    public int getClientesAtendidos() {
-        return this.clientesAtendidos.size();
-    }
-
-    public void setClientesAtendidos(int value) {
-        this.clientesAtendidos.add(value);
     }
 }
