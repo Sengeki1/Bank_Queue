@@ -29,6 +29,7 @@ public class Cliente implements Runnable{
     @Override
     public void run() {
         try {
+            System.out.println("Cliente chegou");
             while (this.clientesAtendidos.size() < 10) {
                 sleep(rand.nextInt(1000, 5000));
                 atendente1 = Adalgiza.tryAcquire();
